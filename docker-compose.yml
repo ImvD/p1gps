@@ -1,0 +1,54 @@
+version: "3"
+services:
+#Se indican los servicios en el orden que se quiere iniciar
+
+
+#Mongo va antes de Order
+#Se resuelve en una dirección IP
+	mongo:
+        image: imvd/p1gps:db
+        deploy:
+            replicas: 1 # escalabilidad del servicio
+            resources:
+                limits:
+                    cpus: "0.15"
+                    memory: 200M
+            restart_policy:
+                condition: on-failure #reiniciar el contenedor si falla
+        ports:
+        #mapeo el puerto del contenedor (derecha) con el del host de servicio (izquierda)
+        
+            - "28017:28017"
+            - "27107:27107"
+        volumes:
+            - "db-data:/data/db" #para persistencia a la sesión
+    order:
+        image: paberlo/p1gps:order
+        depends_on:
+        #le pasamos al servicio order la ip del servicio mongo
+            - "mongo"
+        deploy:
+            replicas: 1
+            resources:
+              limits:
+                cpus: "0.3"
+                memory: 500M
+            restart_policy:
+              condition: on-failure
+        ports:
+            - "8080:8080"
+    web:
+        image: imvd/p1gps:web
+        deploy:
+            replicas: 1 # escalabilidad del servicio
+            resources:
+                limits:
+                    cpus: "0.25"
+                    memory: 300M
+            restart_policy:
+                condition: on-failure #reiniciar el contenedor si falla
+        ports:
+            - "80:8080"
+            
+volumes:
+    db-data:
