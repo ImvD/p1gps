@@ -1,9 +1,9 @@
-FROM mongo
+FROM mongo:3.4
 
 MAINTAINER ivan.matrinezvillanueva@alu.uclm.es
 
 #data/db será el volumen usado para la persistencia de sesión
-COPY drop/* usr/local/data/lb
+COPY drop/* usr/local/data/db/
 
 
 #CMD es lo mismo que ENTRYPOINT pero con otro formato
