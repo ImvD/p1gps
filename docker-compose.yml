@@ -1,11 +1,9 @@
 version: "3"
 services:
 #Se indican los servicios en el orden que se quiere iniciar
-
-
 #Mongo va antes de Order
 #Se resuelve en una dirección IP
-	mongo:
+    mongo:
         image: imvd/p1gps:db
         deploy:
             replicas: 1 # escalabilidad del servicio
